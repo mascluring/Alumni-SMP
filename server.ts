@@ -259,8 +259,17 @@ function extractTokenFromRequest(req: Request): string | null {
   return null;
 }
 
+function assertLocalFallbackAllowed() {
+  if (!supabase && process.env.VERCEL) {
+    throw new Error(
+      'Database Supabase belum dikonfigurasi di Vercel. Tambahkan SUPABASE_URL dan SUPABASE_SERVICE_ROLE_KEY di Settings > Environment Variables lalu Redeploy.'
+    );
+  }
+}
+
 // Local JSON fallback helpers (used ONLY when SUPABASE_URL & SUPABASE_SERVICE_ROLE_KEY are not set)
 async function readLocalAlumni(): Promise<DbAlumniRow[]> {
+  assertLocalFallbackAllowed();
   await fs.mkdir(DATA_DIR, { recursive: true });
   try {
     const raw = await fs.readFile(ALUMNI_FILE, 'utf-8');
@@ -290,11 +299,13 @@ async function readLocalAlumni(): Promise<DbAlumniRow[]> {
 }
 
 async function writeLocalAlumni(rows: DbAlumniRow[]): Promise<void> {
+  assertLocalFallbackAllowed();
   await fs.mkdir(DATA_DIR, { recursive: true });
   await fs.writeFile(ALUMNI_FILE, JSON.stringify(rows, null, 2), 'utf-8');
 }
 
 async function readLocalUsers(): Promise<DbAppUserRow[]> {
+  assertLocalFallbackAllowed();
   await fs.mkdir(DATA_DIR, { recursive: true });
   try {
     const raw = await fs.readFile(USERS_FILE, 'utf-8');
@@ -335,6 +346,7 @@ async function readLocalUsers(): Promise<DbAppUserRow[]> {
 }
 
 async function writeLocalUsers(rows: DbAppUserRow[]): Promise<void> {
+  assertLocalFallbackAllowed();
   await fs.mkdir(DATA_DIR, { recursive: true });
   await fs.writeFile(USERS_FILE, JSON.stringify(rows, null, 2), 'utf-8');
 }
@@ -543,15 +555,20 @@ async function queryNominatim(query: string, restrictIndonesia: boolean) {
   }
 }
 
-async function startServer() {
+export function createApiApp(): express.Express {
   const app = express();
+  app.set('trust proxy', 1);
   app.use(express.json());
   app.use(attachOptionalAuth);
 
   app.get('/api/health', (_req, res) => {
     res.json({
       ok: true,
-      storage: supabase ? 'supabase' : 'local_json',
+      storage: supabase
+        ? 'supabase'
+        : process.env.VERCEL
+          ? 'unconfigured_supabase_on_vercel'
+          : 'local_json',
       timestamp: new Date().toISOString(),
     });
   });
@@ -596,7 +613,11 @@ async function startServer() {
       res.json({ user: dto, token });
     } catch (err) {
       console.error('POST /api/auth/login failed:', err);
-      res.status(500).json({ error: 'Gagal memproses login.' });
+      const message =
+        err instanceof Error && err.message.includes('Supabase')
+          ? err.message
+          : 'Gagal memproses login.';
+      res.status(500).json({ error: message });
     }
   });
 
@@ -702,7 +723,11 @@ async function startServer() {
       res.json({ alumni: rows.map((r) => mapAlumniRow(r as unknown as Record<string, unknown>)) });
     } catch (err) {
       console.error('GET /api/alumni failed:', err);
-      res.status(500).json({ error: 'Gagal memuat data alumni dari database.' });
+      const message =
+        err instanceof Error && err.message.includes('Supabase')
+          ? err.message
+          : 'Gagal memuat data alumni dari database.';
+      res.status(500).json({ error: message });
     }
   });
 
@@ -1185,9 +1210,15 @@ async function startServer() {
     }
   });
 
+  return app;
+}
+
+async function startServer() {
+  const app = createApiApp();
   const isProd = process.env.NODE_ENV === 'production';
   if (!isProd) {
-    const { createServer: createViteServer } = await import('vite');
+    const vitePkg = 'vite';
+    const { createServer: createViteServer } = await import(vitePkg);
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
@@ -1210,7 +1241,9 @@ async function startServer() {
   });
 }
 
-startServer().catch((err) => {
-  console.error('Fatal server startup error:', err);
-  process.exit(1);
-});
+if (!process.env.VERCEL) {
+  startServer().catch((err) => {
+    console.error('Fatal server startup error:', err);
+    process.exit(1);
+  });
+}
