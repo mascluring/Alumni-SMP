@@ -1,0 +1,7 @@
+{
+  "name": "AlumniConnect SMP",
+  "description": "Peta sebaran alumni, direktori angkatan, statistik wilayah, dan pencari teman alumni terdekat saat bepergian.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

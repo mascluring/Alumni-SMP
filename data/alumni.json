@@ -1,0 +1,134 @@
+[
+  {
+    "id": "alm-001",
+    "nama": "Aditya Pratama",
+    "alamat": "Jl. Kemang Raya No. 42, Mampang Prapatan, Jakarta Selatan",
+    "latitude": -6.2607,
+    "longitude": 106.8133,
+    "angkatan": "2014",
+    "kota": "Jakarta Selatan",
+    "profesi": "Arsitek Produk",
+    "createdAt": "2026-09-12T08:30:00.000Z"
+  },
+  {
+    "id": "alm-002",
+    "nama": "Bunga Larasati",
+    "alamat": "Jl. Dago (Ir. H. Juanda) No. 118, Coblong, Bandung",
+    "latitude": -6.8856,
+    "longitude": 107.6137,
+    "angkatan": "2015",
+    "kota": "Bandung",
+    "profesi": "Peneliti Biomedis",
+    "createdAt": "2026-09-14T10:15:00.000Z"
+  },
+  {
+    "id": "alm-003",
+    "nama": "Candra Wijaya",
+    "alamat": "Jl. Malioboro No. 56, Danurejan, Yogyakarta",
+    "latitude": -7.7928,
+    "longitude": 110.3658,
+    "angkatan": "2013",
+    "kota": "Yogyakarta",
+    "profesi": "Dosen Informatika",
+    "createdAt": "2026-09-18T14:20:00.000Z"
+  },
+  {
+    "id": "alm-004",
+    "nama": "Dewi Kusuma",
+    "alamat": "Jl. Tunjungan No. 78, Genteng, Surabaya",
+    "latitude": -7.2584,
+    "longitude": 112.7378,
+    "angkatan": "2014",
+    "kota": "Surabaya",
+    "profesi": "Dokter Umum",
+    "createdAt": "2026-09-21T09:05:00.000Z"
+  },
+  {
+    "id": "alm-005",
+    "nama": "Eko Nugroho",
+    "alamat": "Jl. Pandanaran No. 33, Semarang Tengah, Semarang",
+    "latitude": -6.9849,
+    "longitude": 110.4158,
+    "angkatan": "2012",
+    "kota": "Semarang",
+    "profesi": "Insinyur Sipil",
+    "createdAt": "2026-09-25T11:45:00.000Z"
+  },
+  {
+    "id": "alm-006",
+    "nama": "Fajar Ramadhan",
+    "alamat": "Jl. Ijen Boulevard No. 21, Klojen, Malang",
+    "latitude": -7.9718,
+    "longitude": 112.6254,
+    "angkatan": "2016",
+    "kota": "Malang",
+    "profesi": "Pengembang Web",
+    "createdAt": "2026-10-02T07:50:00.000Z"
+  },
+  {
+    "id": "alm-007",
+    "nama": "Gita Permatasari",
+    "alamat": "Jl. Jenderal Sudirman Kav. 52, Kebayoran Baru, Jakarta Selatan",
+    "latitude": -6.2248,
+    "longitude": 106.8095,
+    "angkatan": "2015",
+    "kota": "Jakarta Selatan",
+    "profesi": "Analis Keuangan",
+    "createdAt": "2026-10-05T13:10:00.000Z"
+  },
+  {
+    "id": "alm-008",
+    "nama": "Hendra Saputra",
+    "alamat": "Jl. Diponegoro No. 19, Medan Polonia, Medan",
+    "latitude": 3.5831,
+    "longitude": 98.6722,
+    "angkatan": "2013",
+    "kota": "Medan",
+    "profesi": "Wirausaha Kuliner",
+    "createdAt": "2026-10-08T16:00:00.000Z"
+  },
+  {
+    "id": "alm-009",
+    "nama": "Indah Suryani",
+    "alamat": "Jl. Pajajaran No. 64, Bogor Tengah, Bogor",
+    "latitude": -6.5971,
+    "longitude": 106.806,
+    "angkatan": "2016",
+    "kota": "Bogor",
+    "profesi": "Desainer Komunikasi",
+    "createdAt": "2026-10-11T09:40:00.000Z"
+  },
+  {
+    "id": "alm-010",
+    "nama": "Joko Santoso",
+    "alamat": "Jl. Penghibur No. 10, Losari, Makassar",
+    "latitude": -5.1436,
+    "longitude": 119.4079,
+    "angkatan": "2012",
+    "kota": "Makassar",
+    "profesi": "Manajer Logistik",
+    "createdAt": "2026-10-15T12:25:00.000Z"
+  },
+  {
+    "id": "alm-011",
+    "nama": "Kartika Wulandari",
+    "alamat": "Jl. Puputan Renon No. 88, Denpasar Timur, Denpasar",
+    "latitude": -8.6716,
+    "longitude": 115.2335,
+    "angkatan": "2017",
+    "kota": "Denpasar",
+    "profesi": "Konsultan Pariwisata",
+    "createdAt": "2026-10-19T15:30:00.000Z"
+  },
+  {
+    "id": "alm-012",
+    "nama": "Lutfi Hakim",
+    "alamat": "Jl. Margonda Raya No. 245, Beji, Depok",
+    "latitude": -6.3728,
+    "longitude": 106.8322,
+    "angkatan": "2017",
+    "kota": "Depok",
+    "profesi": "Guru Matematika",
+    "createdAt": "2026-10-23T08:15:00.000Z"
+  }
+]

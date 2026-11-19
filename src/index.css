@@ -1,0 +1,275 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@import "leaflet/dist/leaflet.css";
+@import "leaflet.markercluster/dist/MarkerCluster.css";
+@import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+
+@layer base {
+  html {
+    font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: "Plus Jakarta Sans", "DM Sans", sans-serif;
+  }
+
+  .font-mono {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+}
+
+.leaflet-container {
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #e2e8f0;
+}
+
+.dark .leaflet-container {
+  background-color: #090d16;
+}
+
+/* Dark mode Leaflet controls, attribution, and tooltips */
+.dark .leaflet-control-zoom {
+  border: 1px solid #334155;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.dark .leaflet-control-zoom a {
+  background-color: #0f172a;
+  color: #e2e8f0;
+  border-bottom-color: #334155;
+}
+
+.dark .leaflet-control-zoom a:hover,
+.dark .leaflet-control-zoom a:focus-visible {
+  background-color: #1e293b;
+  color: #38bdf8;
+}
+
+.dark .leaflet-control-zoom a.leaflet-disabled {
+  background-color: #0f172a;
+  color: #475569;
+}
+
+.dark .leaflet-control-attribution {
+  background: rgba(15, 23, 42, 0.82);
+  color: #94a3b8;
+  border-top-left-radius: 0.375rem;
+}
+
+.dark .leaflet-control-attribution a {
+  color: #38bdf8;
+}
+
+.dark .leaflet-tooltip {
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  color: #f1f5f9;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55);
+  border-radius: 0.5rem;
+  padding: 6px 10px;
+}
+
+.dark .leaflet-tooltip-top::before {
+  border-top-color: #334155;
+}
+
+.dark .leaflet-tooltip-bottom::before {
+  border-bottom-color: #334155;
+}
+
+.dark .leaflet-tooltip-left::before {
+  border-left-color: #334155;
+}
+
+.dark .leaflet-tooltip-right::before {
+  border-right-color: #334155;
+}
+
+.map-tooltip-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.map-tooltip-sub {
+  font-size: 0.6875rem;
+  color: #475569;
+}
+
+.dark .map-tooltip-title {
+  color: #f8fafc;
+}
+
+.dark .map-tooltip-sub {
+  color: #94a3b8;
+}
+
+/* Custom alumni markers */
+.alumni-pin-wrapper {
+  background: transparent;
+  border: none;
+}
+
+.alumni-pin {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px 10px 10px 2px;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f172a;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.28);
+  transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1), background-color 150ms ease, opacity 150ms ease;
+}
+
+.dark .alumni-pin {
+  background: #1e293b;
+  color: #f8fafc;
+  border: 2px solid #94a3b8;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
+}
+
+.alumni-pin-initials {
+  transform: rotate(45deg);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.alumni-pin.is-selected {
+  background: #0284c7;
+  transform: rotate(-45deg) scale(1.16);
+  z-index: 500;
+}
+
+.dark .alumni-pin.is-selected {
+  background: #0ea5e9;
+  color: #082f49;
+  border-color: #e0f2fe;
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.32), 0 6px 16px rgba(0, 0, 0, 0.7);
+}
+
+.alumni-pin.is-me {
+  background: #059669;
+}
+
+.dark .alumni-pin.is-me {
+  background: #10b981;
+  color: #022c22;
+  border-color: #d1fae5;
+}
+
+.alumni-pin.is-within-radius {
+  background: #0369a1;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.32), 0 4px 10px rgba(15, 23, 42, 0.25);
+}
+
+.dark .alumni-pin.is-within-radius {
+  background: #0284c7;
+  border-color: #7dd3fc;
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.32), 0 6px 14px rgba(0, 0, 0, 0.6);
+}
+
+.alumni-pin.is-outside-radius {
+  opacity: 0.38;
+}
+
+/* Cluster pin styles */
+.alumni-cluster-wrapper {
+  background: transparent;
+  border: none;
+}
+
+.alumni-cluster-pin {
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "JetBrains Mono", monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #ffffff;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.26);
+}
+
+.dark .alumni-cluster-pin {
+  border-color: #0f172a;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.35), 0 6px 16px rgba(0, 0, 0, 0.65);
+}
+
+.alumni-cluster-pin.is-sm {
+  width: 36px;
+  height: 36px;
+  font-size: 12px;
+  background: #0284c7;
+}
+
+.dark .alumni-cluster-pin.is-sm {
+  background: #0ea5e9;
+  color: #082f49;
+}
+
+.alumni-cluster-pin.is-md {
+  width: 42px;
+  height: 42px;
+  font-size: 13px;
+  background: #0369a1;
+}
+
+.dark .alumni-cluster-pin.is-md {
+  background: #0284c7;
+  color: #f0f9ff;
+}
+
+.alumni-cluster-pin.is-lg {
+  width: 48px;
+  height: 48px;
+  font-size: 14px;
+  background: #0f172a;
+}
+
+.dark .alumni-cluster-pin.is-lg {
+  background: #38bdf8;
+  color: #082f49;
+}
+
+/* User origin pin */
+.user-origin-wrapper {
+  background: transparent;
+  border: none;
+}
+
+.user-origin-pin {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: #0ea5e9;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 5px rgba(14, 165, 233, 0.26), 0 3px 8px rgba(15, 23, 42, 0.25);
+}
+
+.dark .user-origin-pin {
+  background: #38bdf8;
+  border: 3px solid #0f172a;
+  box-shadow: 0 0 0 6px rgba(56, 189, 248, 0.32), 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Heatmap gradient legend scale */
+.alumni-heatmap-scale {
+  height: 8px;
+  width: 112px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #38bdf8 0%, #22c55e 40%, #facc15 70%, #ef4444 100%);
+}
