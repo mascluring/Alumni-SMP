@@ -716,6 +716,81 @@ export function createApiApp(): express.Express {
     res.json({ ok: true });
   });
 
+  app.post('/api/auth/change-password', requireAuth, async (req: AuthRequest, res) => {
+    try {
+      const actor = req.authUser!;
+      const currentPassword = String(req.body?.currentPassword ?? '');
+      const newPassword = String(req.body?.newPassword ?? '');
+
+      if (!currentPassword || newPassword.length < 6) {
+        res.status(400).json({
+          error: 'Kata sandi saat ini wajib diisi dan kata sandi baru minimal 6 karakter.',
+        });
+        return;
+      }
+
+      if (currentPassword === newPassword) {
+        res.status(400).json({
+          error: 'Kata sandi baru harus berbeda dari kata sandi saat ini.',
+        });
+        return;
+      }
+
+      const existing = await getUserById(actor.id);
+      if (!existing) {
+        res.status(404).json({ error: 'Akun pengguna tidak ditemukan.' });
+        return;
+      }
+      if (!existing.is_active) {
+        res.status(403).json({ error: 'Akun Anda sedang dinonaktifkan oleh Admin.' });
+        return;
+      }
+
+      const validCurrent = await verifyPassword(currentPassword, existing.password_hash);
+      if (!validCurrent) {
+        res.status(401).json({ error: 'Kata sandi saat ini salah.' });
+        return;
+      }
+
+      const nextHash = await hashPassword(newPassword);
+      const updatedAt = new Date().toISOString();
+
+      if (supabase) {
+        const { error } = await supabase
+          .from('app_users')
+          .update({
+            password_hash: nextHash,
+            updated_at: updatedAt,
+          })
+          .eq('id', actor.id);
+        if (error) throw new Error(error.message);
+        res.json({ ok: true, message: 'Kata sandi berhasil diperbarui.' });
+        return;
+      }
+
+      const users = await readLocalUsers();
+      const idx = users.findIndex((u) => u.id === actor.id);
+      if (idx === -1) {
+        res.status(404).json({ error: 'Akun pengguna tidak ditemukan.' });
+        return;
+      }
+      users[idx] = {
+        ...users[idx],
+        password_hash: nextHash,
+        updated_at: updatedAt,
+      };
+      await writeLocalUsers(users);
+      res.json({ ok: true, message: 'Kata sandi berhasil diperbarui.' });
+    } catch (err) {
+      console.error('POST /api/auth/change-password failed:', err);
+      const message =
+        err instanceof Error && err.message.includes('Supabase')
+          ? err.message
+          : 'Gagal memperbarui kata sandi.';
+      res.status(500).json({ error: message });
+    }
+  });
+
   // --- Alumni Routes ---
   app.get('/api/alumni', async (_req, res) => {
     try {

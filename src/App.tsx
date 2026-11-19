@@ -3,6 +3,7 @@ import {
   Briefcase,
   Compass,
   Edit2,
+  KeyRound,
   Loader2,
   LocateFixed,
   LogIn,
@@ -21,6 +22,7 @@ import { AdminUsersView } from './components/AdminUsersView';
 import { AlumniFormModal } from './components/AlumniFormModal';
 import { AlumniMap } from './components/AlumniMap';
 import { AuthModal } from './components/AuthModal';
+import { ChangePasswordModal } from './components/ChangePasswordModal';
 import { DirectoryView } from './components/DirectoryView';
 import { NearbyAlumniView } from './components/NearbyAlumniView';
 import { StatsView } from './components/StatsView';
@@ -75,6 +77,7 @@ export function App() {
   // Modals
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [editingAlumni, setEditingAlumni] = useState<AlumniRecord | null>(null);
   const [pendingDelete, setPendingDelete] = useState<AlumniRecord | null>(null);
 
@@ -466,6 +469,15 @@ export function App() {
                 </button>
                 <button
                   type="button"
+                  onClick={() => setIsChangePasswordOpen(true)}
+                  title="Ubah kata sandi"
+                  aria-label="Ubah kata sandi"
+                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-2 text-slate-700 transition-colors hover:bg-slate-50 shrink-0 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                >
+                  <KeyRound className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  type="button"
                   onClick={toggleTheme}
                   title={theme === 'dark' ? 'Ganti ke tema terang' : 'Ganti ke tema gelap'}
                   aria-label={theme === 'dark' ? 'Ganti ke tema terang' : 'Ganti ke tema gelap'}
@@ -830,6 +842,13 @@ export function App() {
           setEditingAlumni(null);
         }}
         onSave={handleSaveAlumni}
+      />
+
+      {/* Change Own Password Modal */}
+      <ChangePasswordModal
+        isOpen={isChangePasswordOpen}
+        currentUser={currentUser}
+        onClose={() => setIsChangePasswordOpen(false)}
       />
 
       {/* Delete Confirmation Modal */}

@@ -93,6 +93,22 @@ export async function logoutAccount(): Promise<void> {
   setAuthToken(null);
 }
 
+export async function changeOwnPassword(input: {
+  currentPassword: string;
+  newPassword: string;
+}): Promise<{ ok: boolean; message?: string }> {
+  const response = await fetch('/api/auth/change-password', {
+    method: 'POST',
+    headers: authHeaders({ 'Content-Type': 'application/json' }),
+    credentials: 'include',
+    body: JSON.stringify(input),
+  });
+  return parseJsonOrThrow<{ ok: boolean; message?: string }>(
+    response,
+    'Gagal mengubah kata sandi.'
+  );
+}
+
 // Alumni endpoints
 export async function fetchAlumni(): Promise<AlumniRecord[]> {
   const response = await fetch('/api/alumni', {
